@@ -35,7 +35,16 @@ export type Player = {
   } | null;
   competitions: CompetitionStats[];
   trophies: { name: string; competition: string; dateWon: string | null; season: string | null; sourceName: string; sourceUrl: string; verified: boolean }[];
-  individualAwards: { name: string; date: string | null; sourceName: string; sourceUrl: string; verified: boolean }[];
+  individualAwards: {
+    name: string;
+    competition?: string;
+    date: string | null;
+    season: string | null;
+    sourceName: string;
+    sourceUrl: string;
+    verified: boolean;
+    importance?: "major" | "secondary";
+  }[];
   sources: { name: string; url: string }[];
   caseFacts: { text: string; verified: boolean; sourceName?: string; sourceUrl?: string }[];
 };

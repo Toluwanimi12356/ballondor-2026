@@ -4,7 +4,7 @@ A premium interactive community voting experience for the 2026 Ballon d'Or, wher
 
 ## Live Demo
 
-Coming soon
+https://ballondor-2026.vercel.app
 
 ## Features
 
@@ -54,6 +54,14 @@ Visitors do not need an account. The browser creates and persistently stores an 
 
 Follow [FIRESTORE_SETUP.md](FIRESTORE_SETUP.md) to configure Firestore and its security rules. The website uses Firebase's public client configuration; it does not require an Admin SDK service-account key. Required variable names are listed in [.env.example](.env.example).
 
+## Deployment
+
+The production frontend is deployed on Vercel at [ballondor-2026.vercel.app](https://ballondor-2026.vercel.app). Configure these variables in Vercel Project Settings for each required environment: `NEXT_PUBLIC_FIREBASE_API_KEY`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID`, `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`, `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, and `NEXT_PUBLIC_FIREBASE_APP_ID`. Firebase client configuration is public by design; Firestore security rules, not secrecy of these values, must protect data. Never add Admin SDK credentials to the frontend or commit local environment files. A successful local build does not verify the deployed Vercel environment or the active Firebase rules.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for the current threat model and [PRODUCTION_SECURITY_CHECKLIST.md](PRODUCTION_SECURITY_CHECKLIST.md) for deployment-owner actions. The shipped Firestore rules restrict ballot creation to the eight candidate IDs, require a UUIDv4 voter ID matching the document ID, and deny edits and deletes. The client currently reads raw ballots to calculate live totals, so candidate choice and pseudonymous voter ID are publicly readable. Browser-generated IDs are not identity verification and do not prevent votes from a cleared browser or a second device. This implementation has no server-side rate limit or App Check enforcement.
+
 ## Local Development
 
 Requirements: Node.js and npm.
@@ -65,7 +73,7 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-Available project checks are `npm run typecheck` and `npm run lint`.
+Available project checks are `npm run typecheck`, `npm run lint`, and `npm run build`.
 
 ## Environment Variables
 
@@ -80,7 +88,7 @@ npm start
 
 ## Project Structure
 
-- `app/` — Next.js pages, player routes, API routes, and global styles.
+- `app/` — Next.js pages, player routes, and global styles.
 - `components/` — shared brand and player-video components.
 - `data/` — candidate records and verified headline statistics.
 - `lib/` — Firebase voting, anonymous voter IDs, and football data utilities.

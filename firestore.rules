@@ -15,6 +15,6 @@ service cloud.firestore {
         && !exists(/databases/$(database)/documents/votes/$(voteId));
       allow update, delete: if false;
     }
-    match /playerStats/{playerId} { allow read: if true; allow write: if false; }
+    // Unmatched collections are denied by default; no public playerStats reader is shipped.
   }
 }

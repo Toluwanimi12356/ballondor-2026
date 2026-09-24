@@ -1,5 +1,6 @@
 node_modules/
 .next/
+.vercel/
 out/
 coverage/
 .env*
@@ -15,4 +16,5 @@ firebase-adminsdk*.json
 
 .tmp/
 firebase-debug.log
+*.log
 tsconfig.tsbuildinfo

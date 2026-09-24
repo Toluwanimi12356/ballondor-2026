@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /votes/{voteId} {
+      // The public ballot UI aggregates this small collection client-side for live totals.
+      // voterId is a random browser identifier, not an authenticated identity.
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['candidateId', 'voterId', 'createdAt'])
+        && request.resource.data.keys().hasAll(['candidateId', 'voterId', 'createdAt'])
+        && request.resource.data.candidateId in ['harry-kane', 'rodri', 'kylian-mbappe', 'lamine-yamal', 'lionel-messi', 'ousmane-dembele', 'khvicha-kvaratskhelia', 'michael-olise']
+        && request.resource.data.voterId is string
+        && request.resource.data.voterId.matches('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$')
+        && request.resource.data.voterId == voteId
+        && request.resource.data.createdAt == request.time
+        && !exists(/databases/$(database)/documents/votes/$(voteId));
+      allow update, delete: if false;
+    }
+    match /playerStats/{playerId} { allow read: if true; allow write: if false; }
+  }
+}
